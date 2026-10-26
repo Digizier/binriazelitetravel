@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getPackageBySlug, FALLBACK_PACKAGES } from "@/lib/db";
+import TourBookingForm from "@/components/TourBookingForm";
 import { 
   Building2, 
   MapPin, 
@@ -191,6 +192,11 @@ export default async function TourDetailPage({ params }: PageProps) {
                 Visa processing timeline depends on the respective country embassy guidelines. Please ensure your passport has at least 6 months validity from the departure date.
               </p>
             </div>
+
+            {/* Dedicated Tour Inquiry & Booking Form (Requested by User) */}
+            <div id="tour-inquiry-form" className="pt-2">
+              <TourBookingForm pkg={pkg} />
+            </div>
           </div>
 
           {/* Right Sticky Card */}
@@ -219,12 +225,12 @@ export default async function TourDetailPage({ params }: PageProps) {
                   <span>Inquire on WhatsApp</span>
                 </a>
 
-                <Link
-                  href="/inquiry"
+                <a
+                  href="#tour-inquiry-form"
                   className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-[#996515] border border-amber-200 font-bold text-sm rounded-2xl transition-all flex items-center justify-center gap-1.5"
                 >
-                  <span>Submit Custom Inquiry</span>
-                </Link>
+                  <span>Book / Send Tour Details</span>
+                </a>
               </div>
 
               <div className="pt-4 border-t border-slate-100 text-center space-y-1">

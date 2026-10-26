@@ -67,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full antialiased scroll-smooth">
+    <html lang="en" suppressHydrationWarning className="h-full antialiased">
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-[#fcfbf8] text-slate-900 overflow-x-hidden selection:bg-[#d4af37] selection:text-[#022c22]">
         <ScrollToTop />
         <Header />

@@ -129,6 +129,9 @@ export default function InquiryRequirementPage() {
 
     if (res.success) {
       setSuccess(true);
+      window.scrollTo(0, 0);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
       confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
     } else {
       setErrorMsg(res.error || "Failed to submit form. Please retry.");
@@ -489,10 +492,18 @@ export default function InquiryRequirementPage() {
                       <CheckCircle2 className="w-4 h-4" />
                       Passport Image Attached Successfully!
                     </p>
-                    <label className="text-xs text-[#064e3b] underline cursor-pointer">
-                      <span>Replace Photo</span>
-                      <input type="file" accept="image/*" onChange={handlePassportUpload} className="hidden" />
-                    </label>
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 text-[#f7e5a9] text-xs font-semibold rounded-lg cursor-pointer hover:bg-emerald-800 transition-colors">
+                        <Camera className="w-3 h-3" />
+                        <span>Camera</span>
+                        <input type="file" accept="image/*" capture="environment" onChange={handlePassportUpload} className="hidden" />
+                      </label>
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 text-white text-xs font-semibold rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <Upload className="w-3 h-3" />
+                        <span>Gallery</span>
+                        <input type="file" accept="image/*" onChange={handlePassportUpload} className="hidden" />
+                      </label>
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -500,20 +511,39 @@ export default function InquiryRequirementPage() {
                     <p className="text-xs font-bold text-slate-700">
                       پاسپورٹ یا شناختی کارڈ کی تصویر منسلک کریں
                     </p>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Automatically compressed to minimal KB size before uploading.
+                    <p className="text-[11px] text-slate-500 mt-1 mb-4">
+                      Choose from Photo Gallery or snap a direct picture with your phone camera. (Compressed to KBs automatically).
                     </p>
-                    <label className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-[#f7e5a9] text-xs font-semibold rounded-full cursor-pointer hover:bg-[#022c22] transition-colors shadow">
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? "Compressing & Uploading..." : "Choose File or Take Photo"}</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        disabled={uploadingImage}
-                        onChange={handlePassportUpload} 
-                        className="hidden" 
-                      />
-                    </label>
+                    
+                    {/* Two Clear Options for Mobile & Desktop */}
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      {/* Option 1: Mobile Camera */}
+                      <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#064e3b] text-[#f7e5a9] text-xs font-bold rounded-xl cursor-pointer hover:bg-[#022c22] transition-all shadow-sm">
+                        <Camera className="w-4 h-4 text-amber-300" />
+                        <span>{uploadingImage ? "Compressing..." : "📷 Take Photo (Camera)"}</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          capture="environment"
+                          disabled={uploadingImage}
+                          onChange={handlePassportUpload} 
+                          className="hidden" 
+                        />
+                      </label>
+
+                      {/* Option 2: Gallery / Files */}
+                      <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-600 text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-amber-700 transition-all shadow-sm">
+                        <Upload className="w-4 h-4" />
+                        <span>{uploadingImage ? "Compressing..." : "🖼️ Choose from Gallery"}</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          disabled={uploadingImage}
+                          onChange={handlePassportUpload} 
+                          className="hidden" 
+                        />
+                      </label>
+                    </div>
                   </div>
                 )}
               </div>

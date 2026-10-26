@@ -103,23 +103,16 @@ export default function VisaServicesPage() {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+              <div className="pt-4 border-t border-slate-100">
                 <a
-                  href={`https://wa.me/923216001913?text=${encodeURIComponent(`Assalam-o-Alaikum, I need details about ${v.title}.`)}`}
+                  href={`https://wa.me/923216001913?text=${encodeURIComponent(`Assalam-o-Alaikum Bin Riaz Elite Travel, I want to inquire about ${v.title} (${v.duration}, Processing: ${v.processing}). Please share requirements and charges.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2.5 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow"
+                  className="w-full py-3 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] text-xs sm:text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 fill-emerald-400" />
+                  <MessageCircle className="w-4 h-4 fill-emerald-400 text-emerald-400" />
                   <span>Inquire on WhatsApp</span>
                 </a>
-
-                <Link
-                  href="/inquiry"
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl"
-                >
-                  Apply Online
-                </Link>
               </div>
             </div>
           ))}

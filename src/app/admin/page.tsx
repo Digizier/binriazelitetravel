@@ -53,7 +53,12 @@ import {
   Plane,
   Phone,
   MessageCircle,
-  Clock
+  Clock,
+  Star,
+  Check,
+  Sparkles,
+  Globe,
+  Tag
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -80,6 +85,9 @@ export default function AdminDashboardPage() {
   const [editingPackage, setEditingPackage] = useState<Partial<Package> | null>(null);
   const [editingCategory, setEditingCategory] = useState<Partial<Category> | null>(null);
   const [editingBanner, setEditingBanner] = useState<Partial<Banner> | null>(null);
+  const [pkgCategoryFilter, setPkgCategoryFilter] = useState<string>("all");
+  const [newInclusion, setNewInclusion] = useState<string>("");
+  const [newExclusion, setNewExclusion] = useState<string>("");
   
   // Custom Delete Confirmation Modal
   const [deleteModal, setDeleteModal] = useState<{
@@ -179,6 +187,26 @@ export default function AdminDashboardPage() {
       callback(url);
     } catch (err) {
       console.error("Upload error:", err);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Multiple Image Upload helper using WebP compression
+  const handleMultipleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, folder: string, callback: (urls: string[]) => void) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingImage(true);
+    try {
+      const uploaded: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const url = await uploadMedia(files[i], folder);
+        if (url) uploaded.push(url);
+      }
+      callback(uploaded);
+    } catch (err) {
+      console.error("Multiple upload error:", err);
     } finally {
       setUploadingImage(false);
     }
@@ -396,7 +424,7 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => exportPackagesToCSV(packages)}
                   className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
@@ -406,26 +434,59 @@ export default function AdminDashboardPage() {
                 </button>
 
                 <button
-                  onClick={() => setEditingPackage({
-                    title: "",
-                    slug: "",
-                    category: "umrah",
-                    package_type: "standard",
-                    duration: "14 Days",
-                    price: 200000,
-                    currency: "PKR",
-                    status: "available",
-                    is_featured: true,
-                    cover_image: "",
-                    inclusions: ["Return Flight", "Hotel Stay", "Visa", "Transport", "Ziyarat"],
-                    exclusions: ["Personal Expenses"]
-                  })}
+                  onClick={() => {
+                    const defaultCat = pkgCategoryFilter === "international-tours" ? "international-tours" : pkgCategoryFilter === "domestic-tours" ? "domestic-tours" : "umrah";
+                    setEditingPackage({
+                      title: "",
+                      slug: "",
+                      category: defaultCat as any,
+                      package_type: "standard",
+                      duration: defaultCat === "umrah" ? "14 Days" : "7 Days / 6 Nights",
+                      price: 200000,
+                      currency: "PKR",
+                      status: "available",
+                      is_featured: true,
+                      cover_image: "",
+                      gallery_urls: [],
+                      departure_city: "Islamabad / Lahore",
+                      airline: defaultCat === "umrah" ? "Saudi Airlines" : "Emirates / Qatar Airways",
+                      room_types: defaultCat === "umrah" ? "Quad / Triple / Double" : "Twin / Double Sharing",
+                      inclusions: defaultCat === "umrah" 
+                        ? ["Umrah Visa with Insurance", "5-Star Hotel Stay", "VIP Transport", "Makkah & Madinah Ziyarat", "Daily Breakfast Buffet"]
+                        : ["Round-Trip Flights", "4-Star Hotel Stay", "Airport Transfers", "Guided City Tour", "Daily Breakfast Buffet"],
+                      exclusions: ["Personal shopping expenses", "Laundry & Room Service", "Tipping"],
+                      notes: "Passport must have minimum 6 months validity from departure date."
+                    });
+                  }}
                   className="px-4 py-2 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] text-xs font-bold rounded-xl flex items-center gap-1.5 shadow"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Package</span>
                 </button>
               </div>
+            </div>
+
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap items-center gap-2">
+              {[
+                { id: "all", label: `All Packages (${packages.length})` },
+                { id: "umrah", label: `🕋 Umrah Packages (${packages.filter(p => p.category === "umrah").length})` },
+                { id: "international-tours", label: `✈️ International Tours (${packages.filter(p => p.category === "international-tours").length})` },
+                { id: "domestic-tours", label: `🏔️ Domestic Tours (${packages.filter(p => p.category === "domestic-tours").length})` },
+                { id: "other-tours", label: `🌴 Other & Family Tours (${packages.filter(p => !["umrah", "international-tours", "domestic-tours"].includes(p.category)).length})` },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setPkgCategoryFilter(tab.id)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    pkgCategoryFilter === tab.id
+                      ? "bg-[#064e3b] text-[#f7e5a9] shadow-sm"
+                      : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
             {/* Packages Table */}
@@ -444,7 +505,13 @@ export default function AdminDashboardPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {packages.map((pkg) => (
+                    {packages
+                      .filter((pkg) => {
+                        if (pkgCategoryFilter === "all") return true;
+                        if (pkgCategoryFilter === "other-tours") return !["umrah", "international-tours", "domestic-tours"].includes(pkg.category);
+                        return pkg.category === pkgCategoryFilter;
+                      })
+                      .map((pkg) => (
                       <tr key={pkg.id} className="hover:bg-slate-50/60">
                         <td className="p-3.5">
                           <img
@@ -463,7 +530,7 @@ export default function AdminDashboardPage() {
                           </span>
                         </td>
                         <td className="p-3.5 text-[11px] text-slate-600">
-                          <div>{pkg.makkah_hotel || "Makkah Stay"}</div>
+                          <div>{pkg.makkah_hotel || "Hotel Stay"}</div>
                           <div className="text-[10px] text-slate-400">{pkg.airline || "Airline"}</div>
                         </td>
                         <td className="p-3.5 font-bold text-[#064e3b]">
@@ -479,7 +546,10 @@ export default function AdminDashboardPage() {
                         <td className="p-3.5 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
-                              onClick={() => setEditingPackage({ ...pkg })}
+                              onClick={() => setEditingPackage({
+                                ...pkg,
+                                gallery_urls: pkg.gallery_urls || (pkg.cover_image ? [pkg.cover_image] : [])
+                              })}
                               className="p-1.5 text-slate-600 hover:text-[#064e3b] hover:bg-slate-100 rounded-lg"
                               title="Edit Package"
                             >
@@ -846,149 +916,553 @@ export default function AdminDashboardPage() {
       </main>
 
       {/* ========================================================
-          MODAL: EDIT / CREATE PACKAGE (With WebP Upload)
+          MODAL: EDIT / CREATE PACKAGE (Enterprise Dynamic Categorization + Multi-Image)
       ======================================================== */}
       {editingPackage && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-5">
-            <div className="flex justify-between items-center border-b pb-3">
-              <h3 className="font-serif text-lg font-bold text-[#064e3b]">
-                {editingPackage.id ? "Edit Package" : "Create New Package"}
-              </h3>
-              <button onClick={() => setEditingPackage(null)} className="p-1 rounded-full hover:bg-slate-100">
-                <X className="w-5 h-5 text-slate-500" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-3xl w-full max-h-[92vh] overflow-y-auto space-y-6 shadow-2xl">
+            {/* Header */}
+            <div className="flex justify-between items-center border-b pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-amber-600 block">
+                  {editingPackage.category === 'umrah' ? '🕋 Umrah Management' : '✈️ Tour Management'}
+                </span>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#064e3b]">
+                  {editingPackage.id ? `Edit: ${editingPackage.title}` : "Create New Package"}
+                </h3>
+              </div>
+              <button 
+                onClick={() => setEditingPackage(null)} 
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Package Title *</label>
-                <input
-                  type="text"
-                  value={editingPackage.title || ""}
-                  onChange={(e) => setEditingPackage({
-                    ...editingPackage,
-                    title: e.target.value,
-                    slug: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-")
-                  })}
-                  className="w-full p-2.5 rounded-xl border"
-                />
-              </div>
+            {/* SECTION 1: ESSENTIAL DETAILS */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                1. Basic Commercial Details
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                {/* Category Selection */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Package Category *</label>
+                  <select
+                    value={editingPackage.category || "umrah"}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, category: e.target.value as any })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-semibold text-[#064e3b]"
+                  >
+                    <option value="umrah">🕋 Umrah Packages</option>
+                    <option value="international-tours">✈️ International Tours</option>
+                    <option value="domestic-tours">🏔️ Domestic Tours</option>
+                    <option value="family-tours">👨‍👩‍👧 Family Tours</option>
+                    <option value="honeymoon-packages">💍 Honeymoon Packages</option>
+                    <option value="group-tours">👥 Group Tours</option>
+                    <option value="holiday-packages">🌴 Holiday Packages</option>
+                  </select>
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">URL Slug</label>
-                <input
-                  type="text"
-                  value={editingPackage.slug || ""}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, slug: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border bg-slate-50 font-mono"
-                />
-              </div>
+                {/* Package Title (Slug automatically generated, no manual slug input needed!) */}
+                <div className="sm:col-span-2">
+                  <label className="block font-bold text-slate-700 mb-1">Package Title (عنوان) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingPackage.title || ""}
+                    onChange={(e) => {
+                      const newTitle = e.target.value;
+                      const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                      setEditingPackage({
+                        ...editingPackage,
+                        title: newTitle,
+                        slug: autoSlug
+                      });
+                    }}
+                    placeholder="e.g. 14 Days Premium VIP Umrah Package"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#064e3b] outline-none"
+                  />
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Category</label>
-                <select
-                  value={editingPackage.category || "umrah"}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, category: e.target.value as any })}
-                  className="w-full p-2.5 rounded-xl border bg-white"
-                >
-                  <option value="umrah">Umrah Packages</option>
-                  <option value="international-tours">International Tours</option>
-                  <option value="domestic-tours">Domestic Tours</option>
-                  <option value="family-tours">Family Tours</option>
-                  <option value="honeymoon-packages">Honeymoon Packages</option>
-                  <option value="group-tours">Group Tours</option>
-                </select>
-              </div>
+                {/* Duration */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Duration (مدت)</label>
+                  <input
+                    type="text"
+                    value={editingPackage.duration || ""}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, duration: e.target.value })}
+                    placeholder="e.g. 14 Days / 13 Nights"
+                    className="w-full p-2.5 rounded-xl border border-slate-200"
+                  />
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Duration</label>
-                <input
-                  type="text"
-                  value={editingPackage.duration || ""}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, duration: e.target.value })}
-                  placeholder="e.g. 14 Days / 13 Nights"
-                  className="w-full p-2.5 rounded-xl border"
-                />
-              </div>
+                {/* Price */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Price in PKR (قیمت روپے) *</label>
+                  <input
+                    type="number"
+                    value={editingPackage.price || 0}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, price: Number(e.target.value) })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 font-bold text-[#064e3b]"
+                  />
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Price (PKR) *</label>
-                <input
-                  type="number"
-                  value={editingPackage.price || 0}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, price: Number(e.target.value) })}
-                  className="w-full p-2.5 rounded-xl border"
-                />
-              </div>
+                {/* Status */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Booking Status</label>
+                  <select
+                    value={editingPackage.status || "available"}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, status: e.target.value as any })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                  >
+                    <option value="available">🟢 Available (دستیاب ہے)</option>
+                    <option value="limited">🟡 Limited Seats (محدود سیٹیں)</option>
+                    <option value="sold_out">🔴 Sold Out (مکمل بک)</option>
+                  </select>
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Status</label>
-                <select
-                  value={editingPackage.status || "available"}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, status: e.target.value as any })}
-                  className="w-full p-2.5 rounded-xl border bg-white"
-                >
-                  <option value="available">Available</option>
-                  <option value="limited">Limited Seats</option>
-                  <option value="sold_out">Sold Out</option>
-                </select>
-              </div>
+                {/* Badge Type */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Promotional Badge</label>
+                  <select
+                    value={editingPackage.package_type || "standard"}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, package_type: e.target.value as any })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                  >
+                    <option value="luxury">VIP Luxury</option>
+                    <option value="best-seller">Best Seller ⭐</option>
+                    <option value="family-favorite">Family Favorite</option>
+                    <option value="economy">Budget Saver</option>
+                    <option value="standard">Standard</option>
+                    <option value="popular">Popular</option>
+                  </select>
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Makkah Hotel</label>
-                <input
-                  type="text"
-                  value={editingPackage.makkah_hotel || ""}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, makkah_hotel: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Madinah Hotel</label>
-                <input
-                  type="text"
-                  value={editingPackage.madinah_hotel || ""}
-                  onChange={(e) => setEditingPackage({ ...editingPackage, madinah_hotel: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border"
-                />
+                {/* Home Page Featured Toggle */}
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    type="checkbox"
+                    id="is_featured"
+                    checked={editingPackage.is_featured ?? true}
+                    onChange={(e) => setEditingPackage({ ...editingPackage, is_featured: e.target.checked })}
+                    className="w-4 h-4 rounded text-[#064e3b] focus:ring-0"
+                  />
+                  <label htmlFor="is_featured" className="font-semibold text-slate-700 cursor-pointer">
+                    Show on Home Page ⭐
+                  </label>
+                </div>
               </div>
             </div>
 
-            {/* Direct Image Upload with WebP Compression */}
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-              <label className="block text-xs font-bold text-slate-700">Cover Image</label>
-              {editingPackage.cover_image && (
-                <img src={editingPackage.cover_image} alt="Preview" className="h-24 rounded-lg object-cover mb-2 border" />
+            {/* SECTION 2: CATEGORY SPECIFIC FIELDS */}
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#064e3b] flex items-center gap-1.5">
+                {editingPackage.category === 'umrah' ? (
+                  <>
+                    <Building2 className="w-4 h-4 text-amber-600" />
+                    <span>2. Umrah Hotels & Sacred Distances</span>
+                  </>
+                ) : (
+                  <>
+                    <Globe className="w-4 h-4 text-emerald-600" />
+                    <span>2. Tour Destination & Accommodation</span>
+                  </>
+                )}
+              </h4>
+
+              {editingPackage.category === 'umrah' ? (
+                /* UMRAH SPECIFIC FIELDS */
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Makkah Hotel Name & Stars</label>
+                    <input
+                      type="text"
+                      value={editingPackage.makkah_hotel || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, makkah_hotel: e.target.value })}
+                      placeholder="e.g. Swissotel Makkah (5★) or Voco Makkah"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Makkah Distance from Clock Tower / Haram</label>
+                    <input
+                      type="text"
+                      value={editingPackage.makkah_distance || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, makkah_distance: e.target.value })}
+                      placeholder="e.g. 50m from Clock Tower / Haram"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Madinah Hotel Name & Stars</label>
+                    <input
+                      type="text"
+                      value={editingPackage.madinah_hotel || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, madinah_hotel: e.target.value })}
+                      placeholder="e.g. Dur Al Taqwa (5★) or Movenpick"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Madinah Distance from Masjid Nabawi</label>
+                    <input
+                      type="text"
+                      value={editingPackage.madinah_distance || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, madinah_distance: e.target.value })}
+                      placeholder="e.g. 100m from Masjid Nabawi"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Airline & Flight Info</label>
+                    <input
+                      type="text"
+                      value={editingPackage.airline || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, airline: e.target.value })}
+                      placeholder="e.g. Saudi Airlines (SV-733) or PIA"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Departure City in Pakistan</label>
+                    <input
+                      type="text"
+                      value={editingPackage.departure_city || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, departure_city: e.target.value })}
+                      placeholder="e.g. Islamabad / Lahore / Karachi"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block font-bold text-slate-700 mb-1">Room Sharing Categories</label>
+                    <input
+                      type="text"
+                      value={editingPackage.room_types || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, room_types: e.target.value })}
+                      placeholder="e.g. Quad / Triple / Double / Sharing Available"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+                </div>
+              ) : (
+                /* TOUR SPECIFIC FIELDS */
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Tour Destination / Country</label>
+                    <input
+                      type="text"
+                      value={editingPackage.departure_city || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, departure_city: e.target.value })}
+                      placeholder="e.g. Turkey (Istanbul & Cappadocia) or Dubai, UAE"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Hotel / Resort Stay Details</label>
+                    <input
+                      type="text"
+                      value={editingPackage.makkah_hotel || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, makkah_hotel: e.target.value })}
+                      placeholder="e.g. 4-Star Luxury City Center Hotels"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Airline / Transportation</label>
+                    <input
+                      type="text"
+                      value={editingPackage.airline || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, airline: e.target.value })}
+                      placeholder="e.g. Turkish Airlines / Emirates / Airblue"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Room Categories / Sharing</label>
+                    <input
+                      type="text"
+                      value={editingPackage.room_types || ""}
+                      onChange={(e) => setEditingPackage({ ...editingPackage, room_types: e.target.value })}
+                      placeholder="e.g. Twin / Double Sharing / Family Suite"
+                      className="w-full p-2.5 rounded-xl border border-slate-200 bg-white"
+                    />
+                  </div>
+                </div>
               )}
-              <label className="inline-flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-[#f7e5a9] text-xs font-semibold rounded-xl cursor-pointer">
-                <Upload className="w-3.5 h-3.5" />
-                <span>{uploadingImage ? "Compressing & Uploading..." : "Upload & Compress Image"}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  disabled={uploadingImage}
-                  onChange={(e) => handleFileUpload(e, "packages", (url) => setEditingPackage({ ...editingPackage, cover_image: url }))}
-                  className="hidden"
-                />
-              </label>
             </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t">
+            {/* SECTION 3: MULTI-IMAGE UPLOAD & COVER SELECTOR */}
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <ImageIcon className="w-4 h-4 text-amber-600" />
+                    <span>3. Package Images & Cover Photo</span>
+                  </h4>
+                  <p className="text-[11px] text-slate-500">
+                    Upload multiple images. Click "Set as Cover" on whichever image you want as the front cover card.
+                  </p>
+                </div>
+
+                <label className="inline-flex items-center gap-2 px-4 py-2 bg-[#064e3b] text-[#f7e5a9] text-xs font-bold rounded-xl cursor-pointer hover:bg-[#022c22] transition-colors shadow-sm shrink-0">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{uploadingImage ? "Compressing & Uploading..." : "Upload Images"}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    disabled={uploadingImage}
+                    onChange={(e) => handleMultipleFileUpload(e, "packages", (uploadedUrls) => {
+                      const currentGallery = editingPackage.gallery_urls || (editingPackage.cover_image ? [editingPackage.cover_image] : []);
+                      const combined = Array.from(new Set([...currentGallery, ...uploadedUrls]));
+                      setEditingPackage({
+                        ...editingPackage,
+                        gallery_urls: combined,
+                        cover_image: editingPackage.cover_image || combined[0] || ""
+                      });
+                    })}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Gallery Image Grid with Cover Selector */}
+              {editingPackage.gallery_urls && editingPackage.gallery_urls.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                  {editingPackage.gallery_urls.map((imgUrl, i) => {
+                    const isCover = editingPackage.cover_image === imgUrl;
+                    return (
+                      <div 
+                        key={i} 
+                        className={`relative rounded-xl overflow-hidden border-2 transition-all ${
+                          isCover ? "border-amber-500 shadow-md ring-2 ring-amber-300" : "border-slate-200"
+                        }`}
+                      >
+                        <img src={imgUrl} alt={`Thumbnail ${i}`} className="w-full h-24 object-cover" />
+                        
+                        {isCover && (
+                          <div className="absolute top-1 left-1 bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">
+                            ⭐ Cover
+                          </div>
+                        )}
+
+                        <div className="absolute bottom-1 inset-x-1 flex gap-1">
+                          {!isCover && (
+                            <button
+                              type="button"
+                              onClick={() => setEditingPackage({ ...editingPackage, cover_image: imgUrl })}
+                              className="flex-1 py-1 bg-black/75 hover:bg-[#064e3b] text-white text-[9px] font-bold rounded backdrop-blur-sm transition-colors"
+                            >
+                              Set Cover
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (editingPackage.gallery_urls || []).filter(u => u !== imgUrl);
+                              setEditingPackage({
+                                ...editingPackage,
+                                gallery_urls: updated,
+                                cover_image: isCover ? (updated[0] || "") : editingPackage.cover_image
+                              });
+                            }}
+                            className="p-1 bg-red-600/80 hover:bg-red-700 text-white rounded text-[9px] transition-colors"
+                            title="Remove Photo"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-6 text-center border-2 border-dashed border-slate-200 rounded-xl bg-white text-slate-400 text-xs">
+                  No images uploaded yet. Upload images above (will be automatically compressed into tiny KBs).
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 4: INCLUSIONS & EXCLUSIONS */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                4. Package Inclusions & Exclusions
+              </h4>
+
+              {/* Inclusions */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Inclusions (کیا شامل ہے)</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {(editingPackage.inclusions || []).map((inc, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-medium">
+                      <span>{inc}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (editingPackage.inclusions || []).filter((_, idx) => idx !== i);
+                          setEditingPackage({ ...editingPackage, inclusions: updated });
+                        }}
+                        className="text-emerald-700 hover:text-red-600"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newInclusion}
+                    onChange={(e) => setNewInclusion(e.target.value)}
+                    placeholder="Add an included feature (e.g. VIP Transport Bus, Daily Breakfast)"
+                    className="flex-1 p-2 text-xs rounded-xl border border-slate-200"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (newInclusion.trim()) {
+                          setEditingPackage({
+                            ...editingPackage,
+                            inclusions: [...(editingPackage.inclusions || []), newInclusion.trim()]
+                          });
+                          setNewInclusion("");
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newInclusion.trim()) {
+                        setEditingPackage({
+                          ...editingPackage,
+                          inclusions: [...(editingPackage.inclusions || []), newInclusion.trim()]
+                        });
+                        setNewInclusion("");
+                      }
+                    }}
+                    className="px-3 py-2 bg-emerald-700 text-white text-xs font-bold rounded-xl"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              {/* Exclusions */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <X className="w-3.5 h-3.5 text-red-600" />
+                  <span>Exclusions (کیا شامل نہیں ہے)</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {(editingPackage.exclusions || []).map((exc, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-800 border border-red-200 rounded-lg text-xs font-medium">
+                      <span>{exc}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (editingPackage.exclusions || []).filter((_, idx) => idx !== i);
+                          setEditingPackage({ ...editingPackage, exclusions: updated });
+                        }}
+                        className="text-red-700 hover:text-red-900"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newExclusion}
+                    onChange={(e) => setNewExclusion(e.target.value)}
+                    placeholder="Add an excluded item (e.g. Personal shopping, laundry, tips)"
+                    className="flex-1 p-2 text-xs rounded-xl border border-slate-200"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (newExclusion.trim()) {
+                          setEditingPackage({
+                            ...editingPackage,
+                            exclusions: [...(editingPackage.exclusions || []), newExclusion.trim()]
+                          });
+                          setNewExclusion("");
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newExclusion.trim()) {
+                        setEditingPackage({
+                          ...editingPackage,
+                          exclusions: [...(editingPackage.exclusions || []), newExclusion.trim()]
+                        });
+                        setNewExclusion("");
+                      }
+                    }}
+                    className="px-3 py-2 bg-slate-700 text-white text-xs font-bold rounded-xl"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 5: NOTES & TERMS */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                5. Important Notes & Booking Terms (ضروری شرائط)
+              </label>
+              <textarea
+                rows={2}
+                value={editingPackage.notes || ""}
+                onChange={(e) => setEditingPackage({ ...editingPackage, notes: e.target.value })}
+                placeholder="Check-in timings follow Saudi standards. Passport validity minimum 6 months..."
+                className="w-full text-xs p-3 rounded-xl border border-slate-200"
+              />
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex justify-end gap-2 pt-4 border-t">
               <button
+                type="button"
                 onClick={() => setEditingPackage(null)}
-                className="px-4 py-2 rounded-xl text-xs text-slate-600 bg-slate-100"
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={async () => {
-                  await adminSavePackage(editingPackage);
+                  if (!editingPackage.title?.trim()) {
+                    alert("Please provide a Package Title.");
+                    return;
+                  }
+                  // Automatically guarantee slug
+                  const finalSlug = editingPackage.slug || editingPackage.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                  const finalCover = editingPackage.cover_image || (editingPackage.gallery_urls && editingPackage.gallery_urls[0]) || "/logo.png";
+                  await adminSavePackage({
+                    ...editingPackage,
+                    slug: finalSlug,
+                    cover_image: finalCover
+                  });
                   setEditingPackage(null);
                   refreshData();
                 }}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-[#064e3b] text-[#f7e5a9]"
+                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] shadow-md transition-all"
               >
                 Save Package
               </button>

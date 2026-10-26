@@ -44,9 +44,10 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
     : null;
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-amber-400/50 transition-all duration-300 flex flex-col justify-between h-full">
-      {/* Cover Image Container */}
-      <div className="relative aspect-[16/10] sm:aspect-[16/10] overflow-hidden bg-slate-100">
+    <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-amber-400/50 transition-all duration-300 flex flex-col justify-between h-full relative">
+      
+      {/* Clickable Card Header & Image */}
+      <Link href={detailUrl} className="block relative aspect-[16/10] sm:aspect-[16/10] overflow-hidden bg-slate-100 cursor-pointer">
         <img
           src={packageItem.cover_image || "/logo.png"}
           alt={packageItem.title}
@@ -74,17 +75,15 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
           <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#064e3b]" />
           <span>{packageItem.duration}</span>
         </div>
-      </div>
+      </Link>
 
       {/* Content Area */}
       <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between">
-        <div>
+        <Link href={detailUrl} className="block cursor-pointer">
           {/* Package Title */}
-          <Link href={detailUrl} className="block group-hover:text-[#064e3b] transition-colors">
-            <h3 className="font-serif text-sm sm:text-base font-bold text-slate-900 leading-snug line-clamp-2 min-h-[2.5rem]">
-              {packageItem.title}
-            </h3>
-          </Link>
+          <h3 className="font-serif text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#064e3b] transition-colors leading-snug line-clamp-2 min-h-[2.5rem]">
+            {packageItem.title}
+          </h3>
 
           {/* Quick Specifications (Hotels or Locations) */}
           <div className="mt-2.5 space-y-1 text-[11px] sm:text-xs text-slate-600">
@@ -128,11 +127,11 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
               </>
             )}
           </div>
-        </div>
+        </Link>
 
         {/* Pricing & Status */}
         <div className="mt-3 pt-3 border-t border-slate-100">
-          <div className="flex items-baseline justify-between mb-2.5">
+          <Link href={detailUrl} className="flex items-baseline justify-between mb-2.5 cursor-pointer block">
             <div>
               <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium block">
                 Starting from
@@ -155,7 +154,7 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
             }`}>
               {packageItem.status === 'available' ? 'Available' : packageItem.status === 'limited' ? 'Limited' : 'Sold Out'}
             </span>
-          </div>
+          </Link>
 
           {/* Action Buttons: View Details & WhatsApp Inquiry */}
           <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -171,7 +170,8 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full text-center py-2 px-1 sm:px-2 rounded-xl text-xs font-semibold text-[#f7e5a9] bg-[#064e3b] hover:bg-[#022c22] shadow-sm hover:shadow transition-all flex items-center justify-center gap-1"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full text-center py-2 px-1 sm:px-2 rounded-xl text-xs font-semibold text-[#f7e5a9] bg-[#064e3b] hover:bg-[#022c22] shadow-sm hover:shadow transition-all flex items-center justify-center gap-1 z-10"
             >
               <MessageCircle className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400 shrink-0" />
               <span className="truncate">Inquire</span>
