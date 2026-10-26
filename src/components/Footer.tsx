@@ -28,7 +28,9 @@ export default function Footer() {
               <img 
                 src="/logo.png" 
                 alt="Bin Riaz Elite Travels and Tours" 
-                className="h-16 w-auto object-contain"
+                width={64}
+                height={64}
+                className="h-16 w-16 object-contain"
               />
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold tracking-tight text-white leading-tight">

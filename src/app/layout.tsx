@@ -30,9 +30,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Bin Riaz Group of Companies" }],
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/icon.png",
   },
   openGraph: {
     title: "Bin Riaz Elite Travels & Tours | Sacred Journeys, Lasting Memories",
@@ -58,8 +61,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full antialiased scroll-smooth">
-      <body className="min-h-full flex flex-col bg-[#fcfbf8] text-slate-900 overflow-x-hidden selection:bg-[#d4af37] selection:text-[#022c22]">
+    <html lang="en" suppressHydrationWarning className="h-full antialiased scroll-smooth">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-[#fcfbf8] text-slate-900 overflow-x-hidden selection:bg-[#d4af37] selection:text-[#022c22]">
         <ScrollToTop />
         <Header />
         <main className="flex-1">{children}</main>

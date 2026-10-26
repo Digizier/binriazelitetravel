@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/navigation";
-import NextLink from "next/link";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   Phone, 
@@ -10,10 +9,7 @@ import {
   Menu, 
   X, 
   MapPin, 
-  Mail, 
-  ChevronDown,
-  Globe,
-  Sparkles
+  Mail
 } from "lucide-react";
 
 export default function Header() {
@@ -76,11 +72,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo & Brand Identity */}
-          <NextLink href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <img 
               src="/logo.png" 
               alt="Bin Riaz Elite Travels and Tours Emblem" 
-              className="h-14 w-auto object-contain transition-transform group-hover:scale-105 duration-300"
+              width={56}
+              height={56}
+              className="h-14 w-14 object-contain transition-transform group-hover:scale-105 duration-300"
             />
             <div className="flex flex-col">
               <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#064e3b] leading-tight">
@@ -93,14 +91,14 @@ export default function Header() {
                 A Brand by Bin Riaz Group
               </span>
             </div>
-          </NextLink>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-7">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
               return (
-                <NextLink
+                <Link
                   key={link.name}
                   href={link.href}
                   className={`text-sm font-medium transition-colors hover:text-[#064e3b] relative py-1 ${
@@ -113,7 +111,7 @@ export default function Header() {
                   {isActive && (
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#d4af37] rounded-full" />
                   )}
-                </NextLink>
+                </Link>
               );
             })}
           </nav>
@@ -161,7 +159,7 @@ export default function Header() {
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
               return (
-                <NextLink
+                <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
@@ -172,7 +170,7 @@ export default function Header() {
                   }`}
                 >
                   {link.name}
-                </NextLink>
+                </Link>
               );
             })}
           </div>
