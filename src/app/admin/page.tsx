@@ -53,7 +53,6 @@ import {
   Building2,
   Plane,
   Phone,
-  MessageCircle,
   Clock,
   Star,
   Check,
@@ -61,6 +60,7 @@ import {
   Globe,
   Tag
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function AdminDashboardPage() {
   // Authentication PIN Gate
@@ -620,7 +620,7 @@ export default function AdminDashboardPage() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
                         <div className="flex items-center gap-1.5">
-                          <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                          <WhatsAppSolidIcon size={14} className="text-[#25D366]" />
                           <a href={`https://wa.me/${inq.whatsapp_number.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="font-bold text-emerald-700 hover:underline">
                             WhatsApp: {inq.whatsapp_number}
                           </a>

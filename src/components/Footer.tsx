@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Phone, Mail, MapPin, MessageCircle, Heart, ShieldCheck } from "lucide-react";
+import { Phone, Mail, MapPin, Heart, ShieldCheck } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TikTokIcon, WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -55,37 +56,37 @@ export default function Footer() {
                 href="https://www.facebook.com/profile.php?id=61592274299457"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-[#d4af37] hover:text-[#022c22] transition-colors"
+                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all shadow-sm hover:scale-110"
                 aria-label="Facebook Profile"
               >
-                <span className="font-bold text-xs">FB</span>
+                <FacebookIcon size={18} />
               </a>
               <a
                 href="https://www.instagram.com/binriazgroup"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-[#d4af37] hover:text-[#022c22] transition-colors"
+                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white hover:border-transparent transition-all shadow-sm hover:scale-110"
                 aria-label="Instagram Profile"
               >
-                <span className="font-bold text-xs">IG</span>
+                <InstagramIcon size={18} />
               </a>
               <a
                 href="https://www.tiktok.com/@binriazgroup"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-[#d4af37] hover:text-[#022c22] transition-colors"
+                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-black hover:text-white hover:border-white/50 transition-all shadow-sm hover:scale-110"
                 aria-label="TikTok Channel"
               >
-                <span className="font-bold text-xs">TT</span>
+                <TikTokIcon size={18} />
               </a>
               <a
                 href="https://wa.me/923216001913"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-emerald-300 hover:bg-emerald-600 hover:text-white transition-colors"
+                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-emerald-300 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all shadow-sm hover:scale-110"
                 aria-label="WhatsApp Channel"
               >
-                <MessageCircle className="w-4 h-4 fill-current" />
+                <WhatsAppSolidIcon size={18} />
               </a>
             </div>
           </div>
@@ -138,7 +139,7 @@ export default function Footer() {
                 </div>
               </li>
               <li className="flex items-start gap-2">
-                <MessageCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                <WhatsAppSolidIcon size={16} className="text-[#25D366] mt-0.5 shrink-0" />
                 <a href="https://wa.me/923216001913" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300">
                   WhatsApp: +92 321 6001913
                 </a>

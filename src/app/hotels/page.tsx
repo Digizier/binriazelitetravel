@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Building2, MapPin, Star, MessageCircle, ShieldCheck } from "lucide-react";
+import { Building2, MapPin, Star, ShieldCheck } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function HotelsPage() {
   const hotels = [
@@ -112,7 +113,7 @@ export default function HotelsPage() {
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-[#064e3b] text-[#f7e5a9] text-xs font-semibold rounded-xl flex items-center gap-1.5 hover:bg-[#022c22]"
                   >
-                    <MessageCircle className="w-3.5 h-3.5 fill-emerald-400" />
+                    <WhatsAppSolidIcon size={14} className="text-[#25D366]" />
                     <span>Inquire Rates</span>
                   </a>
                 </div>

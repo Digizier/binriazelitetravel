@@ -27,7 +27,6 @@ import {
   FileText, 
   ShieldCheck, 
   PhoneCall, 
-  MessageCircle, 
   ChevronRight, 
   ChevronDown, 
   CheckCircle2, 
@@ -41,6 +40,7 @@ import {
   Clock,
   MapPin
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 import confetti from "canvas-confetti";
 
 export default function HomePage() {
@@ -213,9 +213,9 @@ export default function HomePage() {
               href="https://wa.me/923216001913?text=Assalam-o-Alaikum%20Bin%20Riaz%20Elite%20Travel%2C%20I%20would%20like%20to%20inquire%20about%20Umrah%20and%20Tour%20packages."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm md:text-base font-semibold shadow-md transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm md:text-base font-semibold shadow-md transition-all"
             >
-              <MessageCircle className="w-4 h-4 fill-white text-white" />
+              <WhatsAppSolidIcon size={18} className="text-white" />
               <span>WhatsApp Inquiry</span>
             </a>
 

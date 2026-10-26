@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Compass, Moon, FileText, MessageCircle } from "lucide-react";
+import { Home, Compass, Moon, FileText } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
@@ -53,10 +54,10 @@ export default function MobileBottomNav() {
           className="flex flex-col items-center justify-center h-full text-emerald-600 hover:text-emerald-700"
           aria-label="Direct WhatsApp Message"
         >
-          <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/30">
-            <MessageCircle className="w-4 h-4 fill-white" />
+          <div className="w-9 h-9 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-md shadow-[#25D366]/40 active:scale-95 transition-transform">
+            <WhatsAppSolidIcon size={20} className="text-white" />
           </div>
-          <span className="text-[10px] font-semibold text-emerald-700 mt-0.5">
+          <span className="text-[10px] font-bold text-[#075E54] mt-0.5">
             WhatsApp
           </span>
         </a>

@@ -6,7 +6,6 @@ import { Package } from "@/types";
 import { 
   Send, 
   CheckCircle2, 
-  MessageCircle, 
   PhoneCall, 
   Users, 
   MapPin, 
@@ -15,6 +14,7 @@ import {
   Sparkles,
   AlertCircle
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 import confetti from "canvas-confetti";
 
 interface TourBookingFormProps {
@@ -101,7 +101,7 @@ export default function TourBookingForm({ pkg }: TourBookingFormProps) {
             rel="noopener noreferrer"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] px-6 py-3 rounded-full text-xs sm:text-sm font-bold shadow-md transition-all"
           >
-            <MessageCircle className="w-4 h-4 fill-emerald-400 text-emerald-400" />
+            <WhatsAppSolidIcon size={18} className="text-[#25D366]" />
             <span>Connect on WhatsApp for Instant Confirmation</span>
           </a>
 

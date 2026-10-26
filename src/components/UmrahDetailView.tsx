@@ -12,13 +12,13 @@ import {
   Clock, 
   CheckCircle2, 
   XCircle, 
-  MessageCircle, 
   PhoneCall, 
   ShieldCheck, 
   Sparkles,
   ArrowLeft,
   ChevronRight
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 interface UmrahDetailViewProps {
   initialPackage: Package;
@@ -268,7 +268,7 @@ export default function UmrahDetailView({ initialPackage }: UmrahDetailViewProps
                   rel="noopener noreferrer"
                   className="w-full py-3.5 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] font-bold text-sm rounded-2xl shadow-lg shadow-emerald-950/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
-                  <MessageCircle className="w-5 h-5 fill-emerald-400 text-emerald-400" />
+                  <WhatsAppSolidIcon size={20} className="text-[#25D366]" />
                   <span>Inquire on WhatsApp</span>
                 </a>
 

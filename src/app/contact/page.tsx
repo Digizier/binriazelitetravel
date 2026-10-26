@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle2 } from "lucide-react";
+import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TikTokIcon, WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 import { createInquiry } from "@/lib/db";
 import confetti from "canvas-confetti";
 
@@ -80,8 +81,8 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <MessageCircle className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#25D366] flex items-center justify-center shrink-0">
+                    <WhatsAppSolidIcon size={20} />
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400">Direct WhatsApp</span>
@@ -129,25 +130,28 @@ export default function ContactPage() {
                     href="https://www.facebook.com/profile.php?id=61592274299457"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-700 hover:bg-[#064e3b] hover:text-white"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700 hover:bg-[#1877F2] hover:text-white transition-all shadow-sm"
                   >
-                    Facebook
+                    <FacebookIcon size={14} />
+                    <span>Facebook</span>
                   </a>
                   <a
                     href="https://www.instagram.com/binriazgroup"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-700 hover:bg-[#064e3b] hover:text-white"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white transition-all shadow-sm"
                   >
-                    Instagram
+                    <InstagramIcon size={14} />
+                    <span>Instagram</span>
                   </a>
                   <a
                     href="https://www.tiktok.com/@binriazgroup"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-slate-700 hover:bg-[#064e3b] hover:text-white"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700 hover:bg-black hover:text-white transition-all shadow-sm"
                   >
-                    TikTok
+                    <TikTokIcon size={14} />
+                    <span>TikTok</span>
                   </a>
                 </div>
               </div>

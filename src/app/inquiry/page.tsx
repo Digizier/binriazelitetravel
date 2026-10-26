@@ -11,7 +11,6 @@ import {
   Upload, 
   Camera, 
   Phone, 
-  MessageCircle, 
   ShieldCheck, 
   Building2, 
   Bus, 
@@ -20,6 +19,7 @@ import {
   Sparkles,
   AlertCircle
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 import confetti from "canvas-confetti";
 
 export default function InquiryRequirementPage() {
@@ -176,7 +176,7 @@ export default function InquiryRequirementPage() {
                 rel="noopener noreferrer"
                 className="w-full py-3.5 bg-[#064e3b] text-[#f7e5a9] rounded-2xl font-bold text-xs sm:text-sm shadow flex items-center justify-center gap-2"
               >
-                <MessageCircle className="w-4 h-4 fill-emerald-400" />
+                <WhatsAppSolidIcon size={18} className="text-[#25D366]" />
                 <span>Confirm on WhatsApp Immediately</span>
               </a>
 

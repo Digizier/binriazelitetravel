@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Award, ShieldCheck, Users, Clock, Heart, Sparkles, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Award, ShieldCheck, Users, Clock, Heart, Sparkles, MapPin, Phone } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function AboutPage() {
   return (
@@ -78,9 +79,9 @@ export default function AboutPage() {
               href="https://wa.me/923216001913"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-2.5 rounded-full bg-[#f7e5a9] text-[#022c22] font-bold text-xs sm:text-sm flex items-center gap-2"
+              className="px-6 py-2.5 rounded-full bg-[#f7e5a9] text-[#022c22] font-bold text-xs sm:text-sm flex items-center gap-2 hover:bg-white transition-all shadow-sm"
             >
-              <MessageCircle className="w-4 h-4" />
+              <WhatsAppSolidIcon size={16} className="text-[#25D366]" />
               <span>WhatsApp: 0321-6001913</span>
             </a>
             <a

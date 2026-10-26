@@ -5,12 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   Phone, 
-  MessageCircle, 
   Menu, 
   X, 
   MapPin, 
   Mail
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function Header() {
   const pathname = usePathname();
@@ -61,7 +61,7 @@ export default function Header() {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 font-semibold text-amber-300 hover:text-white transition-colors"
             >
-              <MessageCircle className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+              <WhatsAppSolidIcon size={14} className="text-[#25D366]" />
               WhatsApp: +92 321 6001913
             </a>
           </div>
@@ -159,7 +159,7 @@ export default function Header() {
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-[#064e3b] text-[#f7e5a9] py-3 rounded-xl font-semibold text-sm shadow-md"
             >
-              <MessageCircle className="w-4 h-4 fill-emerald-400 text-emerald-400" />
+              <WhatsAppSolidIcon size={18} className="text-[#25D366]" />
               Chat on WhatsApp: 0321-6001913
             </a>
             <a

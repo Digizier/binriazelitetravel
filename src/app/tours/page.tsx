@@ -12,13 +12,13 @@ import {
   Award, 
   Users, 
   Sparkles, 
-  MessageCircle, 
   Send,
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
   Star
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function ToursPage() {
   const [packages, setPackages] = useState<Package[]>([]);
@@ -302,9 +302,9 @@ export default function ToursPage() {
               href="https://wa.me/923216001913?text=Assalam-o-Alaikum%20Bin%20Riaz%20Elite%20Travel%2C%20I%20would%20like%20to%20plan%20an%20international%20tour."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-2 border border-emerald-600 shadow"
+              className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-[#25D366] hover:bg-[#1EBE5D] text-white flex items-center gap-2 shadow"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <WhatsAppSolidIcon size={16} className="text-white" />
               <span>WhatsApp Us</span>
             </a>
           </div>

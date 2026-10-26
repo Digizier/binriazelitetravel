@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles, ShieldCheck, CheckCircle2, MessageCircle, Phone } from "lucide-react";
+import { Sparkles, ShieldCheck, CheckCircle2, Phone } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function HajjServicesPage() {
   return (
@@ -54,7 +55,7 @@ export default function HajjServicesPage() {
               rel="noopener noreferrer"
               className="py-3 px-6 bg-[#064e3b] text-[#f7e5a9] font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2"
             >
-              <MessageCircle className="w-4 h-4 fill-emerald-400" />
+              <WhatsAppSolidIcon size={18} className="text-[#25D366]" />
               <span>Inquire for Hajj on WhatsApp</span>
             </a>
             <a

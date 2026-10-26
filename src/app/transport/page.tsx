@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Bus, MapPin, ShieldCheck, CheckCircle2, MessageCircle } from "lucide-react";
+import { Bus, MapPin, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function TransportServicesPage() {
   const routes = [
@@ -71,7 +72,7 @@ export default function TransportServicesPage() {
               rel="noopener noreferrer"
               className="px-5 py-2.5 bg-[#064e3b] text-[#f7e5a9] rounded-xl text-xs font-bold shrink-0 flex items-center justify-center gap-2 hover:bg-[#022c22] shadow"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-emerald-400" />
+              <WhatsAppSolidIcon size={16} className="text-[#25D366]" />
               <span>Book on WhatsApp</span>
             </a>
           </div>

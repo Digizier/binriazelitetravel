@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { FileText, CheckCircle2, ShieldCheck, Clock, MessageCircle, ArrowRight } from "lucide-react";
+import { FileText, CheckCircle2, ShieldCheck, Clock, ArrowRight } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function VisaServicesPage() {
   const visaTypes = [
@@ -110,7 +111,7 @@ export default function VisaServicesPage() {
                   rel="noopener noreferrer"
                   className="w-full py-3 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] text-xs sm:text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm hover:shadow transition-all"
                 >
-                  <MessageCircle className="w-4 h-4 fill-emerald-400 text-emerald-400" />
+                  <WhatsAppSolidIcon size={16} className="text-[#25D366]" />
                   <span>Inquire on WhatsApp</span>
                 </a>
               </div>

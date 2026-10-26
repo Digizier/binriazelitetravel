@@ -2,7 +2,7 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 export default function FloatingWhatsApp() {
   const pathname = usePathname();
@@ -29,7 +29,7 @@ export default function FloatingWhatsApp() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white"></span>
         </span>
-        <MessageCircle className="w-8 h-8 fill-white" />
+        <WhatsAppSolidIcon size={32} className="text-white" />
       </a>
     </div>
   );

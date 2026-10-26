@@ -9,10 +9,10 @@ import {
   Clock, 
   Building2, 
   Plane, 
-  MessageCircle, 
   ChevronRight,
   Sparkles
 } from "lucide-react";
+import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
 
 interface PackageCardProps {
   packageItem: Package;
@@ -171,9 +171,9 @@ export default function PackageCard({ packageItem, isTourPage = false }: Package
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="w-full text-center py-2 px-1 sm:px-2 rounded-xl text-xs font-semibold text-[#f7e5a9] bg-[#064e3b] hover:bg-[#022c22] shadow-sm hover:shadow transition-all flex items-center justify-center gap-1 z-10"
+              className="w-full text-center py-2 px-1 sm:px-2 rounded-xl text-xs font-semibold text-[#f7e5a9] bg-[#064e3b] hover:bg-[#022c22] shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5 z-10"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400 shrink-0" />
+              <WhatsAppSolidIcon size={14} className="text-[#25D366] shrink-0" />
               <span className="truncate">Inquire</span>
             </a>
           </div>

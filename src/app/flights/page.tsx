@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plane, Calendar, Users, Send, CheckCircle2, MessageCircle } from "lucide-react";
+import { Plane, Calendar, Users, Send, CheckCircle2 } from "lucide-react";
 import { createInquiry } from "@/lib/db";
 import confetti from "canvas-confetti";
 
