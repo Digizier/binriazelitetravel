@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "Bin Riaz Elite Travels & Tours",
     images: [
       {
-        url: "/logo.png",
+        url: "https://binriazelitetravel.com/logo.png",
         width: 800,
         height: 800,
         alt: "Bin Riaz Elite Travels and Tours Emblem",
@@ -52,6 +52,12 @@ export const metadata: Metadata = {
     ],
     locale: "en_PK",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bin Riaz Elite Travels & Tours | Sacred Journeys, Lasting Memories",
+    description: "Your trusted partner for 5-star & budget Umrah packages, worldwide tours, visas, and flight booking.",
+    images: ["https://binriazelitetravel.com/logo.png"],
   },
 };
 

@@ -12,7 +12,7 @@ export default function FloatingWhatsApp() {
   }
 
   return (
-    <div className="fixed bottom-20 md:bottom-8 right-4 md:right-7 z-40 flex items-center group">
+    <div className="fixed bottom-8 right-7 z-40 hidden md:flex items-center group">
       {/* Tooltip on desktop hover */}
       <span className="hidden md:inline-block mr-3 bg-white text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         Chat with Malik Amir Riaz

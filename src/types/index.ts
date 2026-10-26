@@ -17,6 +17,7 @@ export interface Package {
   room_types?: string;
   price: number;
   currency: string;
+  description?: string;
   cover_image: string;
   gallery_urls?: string[];
   inclusions?: string[];

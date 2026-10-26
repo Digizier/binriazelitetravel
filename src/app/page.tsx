@@ -160,47 +160,50 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen bg-[#fcfbf8]">
       
       {/* ==============================================================
-          SECTION 1: HERO BANNER (Matching Reference Image 2)
+          SECTION 1: HERO BANNER (Luminous Ambient Architecture + Responsive Typography)
       ============================================================== */}
-      <section className="relative w-full min-h-[550px] lg:min-h-[640px] flex items-center justify-center overflow-hidden bg-slate-950">
-        {/* Background Image with Warm Golden Hour Overlay */}
+      <section className="relative w-full min-h-[520px] sm:min-h-[580px] lg:min-h-[640px] flex items-center justify-center overflow-hidden bg-[#022c22]">
+        {/* Background Image with Luminous Warm Amber & Deep Emerald Lighting */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=2000&q=85"
-            alt="Makkah Clock Tower and Holy Kaaba Sunset"
-            className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity scale-105 animate-pulse duration-10000"
+            src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=2200&q=85"
+            alt="Makkah Clock Tower and Holy Kaaba Architecture"
+            className="w-full h-full object-cover object-center opacity-65 scale-105 transition-all duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#022c22] via-[#022c22]/70 to-black/60" />
+          {/* Subtle luminous layered gradients so architectural details remain clearly visible */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#022c22] via-[#022c22]/60 to-[#022c22]/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#022c22]/70 via-transparent to-[#022c22]/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/10 via-transparent to-black/30 pointer-events-none" />
         </div>
 
         {/* Hero Content Box */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
           {/* Trust Badge Pill */}
-          <div className="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37]/40 backdrop-blur-md px-4 py-1.5 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span className="text-xs sm:text-sm font-semibold tracking-wide text-amber-200 uppercase">
+          <div className="inline-flex items-center gap-2 bg-[#022c22]/80 border border-[#d4af37]/60 backdrop-blur-md px-3.5 sm:px-4 py-1.5 rounded-full mb-5 sm:mb-6 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+            <span className="text-[11px] sm:text-xs md:text-sm font-semibold tracking-wider text-amber-200 uppercase">
               Your Trusted Travel Partner
             </span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight sm:leading-tight mb-4 drop-shadow-md">
+          {/* Main Headline - Fully Responsive */}
+          <h1 className="font-serif text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.2] sm:leading-tight mb-4 drop-shadow-md">
             Sacred Journeys, <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f7e5a9] via-amber-200 to-[#d4af37]">
               Lasting Memories
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-slate-200 text-sm sm:text-lg max-w-2xl mx-auto mb-8 font-light leading-relaxed">
+          {/* Subtitle - Fully Responsive */}
+          <p className="text-emerald-50/90 text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto mb-7 sm:mb-8 font-normal leading-relaxed">
             We provide reliable and comfortable travel services for Umrah, Hajj, International & Domestic Tours. Your journey is our priority.
           </p>
 
           {/* Call to Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
             <Link
               href="/umrah-packages"
-              className="inline-flex items-center gap-2 bg-[#064e3b] hover:bg-[#043e2f] border border-emerald-500/30 text-[#f7e5a9] px-6 py-3.5 rounded-full text-sm sm:text-base font-bold shadow-lg shadow-emerald-950/40 hover:scale-105 transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-[#064e3b] hover:bg-[#022c22] border border-amber-400/40 text-[#f7e5a9] px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm md:text-base font-bold shadow-lg shadow-emerald-950/40 hover:scale-105 transition-all"
             >
               <span>Explore Umrah Packages</span>
               <ArrowRight className="w-4 h-4 text-amber-300" />
@@ -210,7 +213,7 @@ export default function HomePage() {
               href="https://wa.me/923216001913?text=Assalam-o-Alaikum%20Bin%20Riaz%20Elite%20Travel%2C%20I%20would%20like%20to%20inquire%20about%20Umrah%20and%20Tour%20packages."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3.5 rounded-full text-sm sm:text-base font-semibold shadow-md transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm md:text-base font-semibold shadow-md transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-white text-white" />
               <span>WhatsApp Inquiry</span>
@@ -218,7 +221,7 @@ export default function HomePage() {
 
             <a
               href="tel:03157801913"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-slate-100 border border-white/20 px-5 py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/25 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm md:text-base font-semibold transition-all"
             >
               <PhoneCall className="w-4 h-4 text-amber-300" />
               <span>Call Now</span>
@@ -312,7 +315,7 @@ export default function HomePage() {
       </section>
 
       {/* ==============================================================
-          SECTION 4: EXPLORE MAIN CATEGORIES (Continuous Ticker / Marquee)
+          SECTION 4: EXPLORE MAIN CATEGORIES (Continuous L-to-R Ticker / Marquee)
       ============================================================== */}
       <section className="py-10 bg-white overflow-hidden border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-5 flex justify-between items-end">
@@ -327,10 +330,10 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Infinite Auto-Scrolling Marquee Container */}
+        {/* Infinite Left-to-Right Auto-Scrolling Marquee Container */}
         <div className="relative w-full overflow-hidden py-2">
-          <div className="animate-marquee flex gap-3 sm:gap-4">
-            {[...categories, ...categories].map((cat, idx) => (
+          <div className="animate-marquee-ltr flex gap-3 sm:gap-4">
+            {[...categories, ...categories, ...categories, ...categories].map((cat, idx) => (
               <Link
                 key={`${cat.id}-${idx}`}
                 href={cat.type === "umrah" ? "/umrah-packages" : `/tours?category=${cat.slug}`}
@@ -533,7 +536,7 @@ export default function HomePage() {
       </section>
 
       {/* ==============================================================
-          SECTION 9: AUTHORIZED BRANDS & AIRLINE PARTNERS (Single Row Ticker)
+          SECTION 9: AUTHORIZED BRANDS & AIRLINE PARTNERS (Continuous L-to-R Ticker)
       ============================================================== */}
       <section className="py-8 bg-slate-100/70 border-y border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-center">
@@ -541,15 +544,17 @@ export default function HomePage() {
             Authorized Airline Partners & Genuine Service Providers
           </span>
         </div>
-        <div className="relative w-full overflow-hidden">
-          <div className="animate-marquee flex items-center gap-12 sm:gap-16 opacity-75">
+        <div className="relative w-full overflow-hidden py-1">
+          <div className="animate-marquee-ltr flex items-center gap-10 sm:gap-14 opacity-80">
             {[
               "Saudi Airlines", "PIA (Pakistan International)", "Emirates Airline", 
-              "Qatar Airways", "Turkish Airlines", "Flynas", "Airblue", "SereneAir",
+              "Qatar Airways", "Turkish Airlines", "Flynas", "Airblue", "SereneAir", "Gulf Air", "Oman Air",
               "Saudi Airlines", "PIA (Pakistan International)", "Emirates Airline", 
-              "Qatar Airways", "Turkish Airlines", "Flynas"
+              "Qatar Airways", "Turkish Airlines", "Flynas", "Airblue", "SereneAir", "Gulf Air", "Oman Air",
+              "Saudi Airlines", "PIA (Pakistan International)", "Emirates Airline", 
+              "Qatar Airways", "Turkish Airlines", "Flynas", "Airblue", "SereneAir", "Gulf Air", "Oman Air"
             ].map((airline, idx) => (
-              <div key={idx} className="shrink-0 flex items-center gap-2 font-serif text-sm sm:text-base font-bold text-slate-700">
+              <div key={idx} className="shrink-0 flex items-center gap-2.5 font-serif text-sm sm:text-base font-bold text-slate-700 bg-white/70 px-4 py-2 rounded-xl border border-slate-200/80 shadow-xs">
                 <Plane className="w-4 h-4 text-[#064e3b]" />
                 <span>{airline}</span>
               </div>

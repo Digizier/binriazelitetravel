@@ -102,8 +102,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400">Official Email</span>
-                    <a href="mailto:info@binriazelitetravel.com" className="text-sm font-bold text-slate-900 block hover:text-[#064e3b]">
-                      info@binriazelitetravel.com
+                    <a href="mailto:binriazelitetravel@gmail.com" className="text-sm font-bold text-slate-900 block hover:text-[#064e3b]">
+                      binriazelitetravel@gmail.com
                     </a>
                   </div>
                 </div>

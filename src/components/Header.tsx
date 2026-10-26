@@ -44,7 +44,7 @@ export default function Header() {
             </span>
             <span className="flex items-center gap-1.5 text-emerald-100">
               <Mail className="w-3.5 h-3.5 text-amber-400" />
-              info@binriazelitetravel.com
+              binriazelitetravel@gmail.com
             </span>
           </div>
           <div className="flex items-center space-x-6">
@@ -72,22 +72,22 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo & Brand Identity */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
             <img 
               src="/logo.png" 
               alt="Bin Riaz Elite Travels and Tours Emblem" 
               width={56}
               height={56}
-              className="h-14 w-14 object-contain transition-transform group-hover:scale-105 duration-300"
+              className="h-11 w-11 sm:h-12 sm:w-12 md:h-14 md:w-14 object-contain transition-transform group-hover:scale-105 duration-300 shrink-0"
             />
             <div className="flex flex-col">
-              <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#064e3b] leading-tight">
+              <span className="font-serif text-base sm:text-lg md:text-xl font-bold tracking-tight text-[#064e3b] leading-tight">
                 BIN RIAZ <span className="text-[#996515]">ELITE</span>
               </span>
-              <span className="text-[10px] tracking-widest uppercase font-semibold text-slate-500">
+              <span className="text-[9px] sm:text-[10px] tracking-widest uppercase font-semibold text-slate-500">
                 Travels & Tours
               </span>
-              <span className="text-[9px] text-[#064e3b]/80 font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#064e3b]/80 font-medium">
                 A Brand by Bin Riaz Group
               </span>
             </div>
@@ -116,34 +116,11 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Header Action CTA: WhatsApp Pill */}
-          <div className="hidden sm:flex items-center gap-3">
-            <a
-              href="https://wa.me/923216001913?text=Assalam-o-Alaikum%2C%20Bin%20Riaz%20Elite%20Travel%2C%20I%20would%20like%20to%20inquire%20about%20packages."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#064e3b] hover:bg-[#022c22] text-[#f7e5a9] px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold shadow-md shadow-emerald-900/10 hover:shadow-lg transition-all"
-            >
-              <MessageCircle className="w-4 h-4 text-emerald-400 fill-emerald-400" />
-              <span>WhatsApp Us</span>
-              <span className="hidden xl:inline text-xs text-amber-200/90 font-mono">+92 321 6001913</span>
-            </a>
-          </div>
-
           {/* Mobile Hamburger Button */}
-          <div className="flex lg:hidden items-center gap-2">
-            <a
-              href="https://wa.me/923216001913"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 text-emerald-700 bg-emerald-50 rounded-full hover:bg-emerald-100"
-              aria-label="WhatsApp"
-            >
-              <MessageCircle className="w-5 h-5 fill-emerald-600 text-emerald-600" />
-            </a>
+          <div className="flex lg:hidden items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-700 hover:text-[#064e3b] hover:bg-slate-100 focus:outline-none"
+              className="p-2.5 rounded-xl text-slate-700 hover:text-[#064e3b] hover:bg-slate-100 transition-colors focus:outline-none"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

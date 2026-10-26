@@ -145,8 +145,8 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
-                <a href="mailto:info@binriazelitetravel.com" className="hover:text-amber-300 break-all">
-                  info@binriazelitetravel.com
+                <a href="mailto:binriazelitetravel@gmail.com" className="hover:text-amber-300 break-all">
+                  binriazelitetravel@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">

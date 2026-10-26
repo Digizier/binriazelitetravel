@@ -213,7 +213,7 @@ export const FALLBACK_SETTINGS: SiteSettings = {
   primary_phone: '0321-6001913',
   secondary_phone: '0315-7801913',
   whatsapp_number: '03216001913',
-  email: 'info@binriazelitetravel.com',
+  email: 'binriazelitetravel@gmail.com',
   office_address: 'Bin Riaz Group of Companies, Pakistan',
   tiktok_url: 'https://www.tiktok.com/@binriazgroup',
   facebook_url: 'https://www.facebook.com/profile.php?id=61592274299457',
