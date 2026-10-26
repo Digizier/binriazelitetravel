@@ -13,6 +13,7 @@ import {
   getCategories, 
   getBanners, 
   getSiteSettings, 
+  adminGetPackages,
   adminGetInquiries, 
   adminUpdateInquiryStatus, 
   adminDeleteInquiry, 
@@ -126,13 +127,13 @@ export default function AdminDashboardPage() {
   const refreshData = async () => {
     try {
       const [pkgsRes, inqsRes, catsRes, bansRes, setsRes] = await Promise.all([
-        getPackages({ limit: 100 }),
+        adminGetPackages(),
         adminGetInquiries(),
         getCategories(),
         getBanners(),
         getSiteSettings(),
       ]);
-      setPackages(pkgsRes.packages);
+      setPackages(pkgsRes);
       setInquiries(inqsRes);
       setCategories(catsRes);
       setBanners(bansRes);
@@ -1427,11 +1428,11 @@ export default function AdminDashboardPage() {
                 5. Important Notes & Booking Terms (ضروری شرائط)
               </label>
               <textarea
-                rows={2}
+                rows={4}
                 value={editingPackage.notes || ""}
                 onChange={(e) => setEditingPackage({ ...editingPackage, notes: e.target.value })}
-                placeholder="Check-in timings follow Saudi standards. Passport validity minimum 6 months..."
-                className="w-full text-xs p-3 rounded-xl border border-slate-200"
+                placeholder="Important Notes & Booking Terms: e.g. Hotel check-in and check-out timings, visa processing timeline, airline ticket rules..."
+                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#064e3b] outline-none"
               />
             </div>
 

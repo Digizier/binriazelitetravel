@@ -239,13 +239,31 @@ export const FALLBACK_SETTINGS: SiteSettings = {
 };
 
 // ==========================================
-// Selective Query Projections (No SELECT *)
+// Comprehensive & Lean Package Projections
 // ==========================================
 const PACKAGE_LIST_FIELDS = `
   id, title, slug, category, package_type, duration, departure_city, departure_date,
-  makkah_hotel, makkah_distance, madinah_hotel, madinah_distance, price, currency,
-  cover_image, status, is_featured, display_order
+  airline, flight_number, makkah_hotel, makkah_distance, madinah_hotel, madinah_distance,
+  room_types, price, currency, cover_image, gallery_urls, inclusions, exclusions,
+  notes, description, status, is_featured, display_order, created_at, updated_at
 `;
+
+export async function adminGetPackages(): Promise<Package[]> {
+  try {
+    const { data, error } = await supabase
+      .from('packages')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_PACKAGES;
+    }
+    return data as Package[];
+  } catch (err) {
+    console.error('adminGetPackages error:', err);
+    return FALLBACK_PACKAGES;
+  }
+}
 
 export async function getPackages(options?: {
   category?: string;
