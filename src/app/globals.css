@@ -129,7 +129,7 @@
   }
 }
 
-/* Print Invoice Styles */
+/* Print Invoice & PDF Generator Styles */
 @media print {
   body * {
     visibility: hidden;
@@ -143,9 +143,19 @@
     top: 0;
     width: 100%;
     margin: 0;
-    padding: 20px;
+    padding: 15px 25px !important;
     background: #ffffff !important;
     color: #000000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #printable-invoice table, 
+  #printable-invoice tr, 
+  #printable-invoice td, 
+  #printable-invoice th {
+    page-break-inside: avoid !important;
   }
   .no-print {
     display: none !important;

@@ -50,43 +50,43 @@ export default function Footer() {
               Your trusted travel partner for Umrah, Hajj, international & domestic tours. We create sacred journeys and unforgettable travel experiences with premium care and personalized attention.
             </p>
 
-            {/* Social Media Links */}
+            {/* Real Social Media Brand Icons */}
             <div className="flex items-center space-x-3 pt-2">
               <a
                 href="https://www.facebook.com/profile.php?id=61592274299457"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all shadow-sm hover:scale-110"
+                className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center transition-all shadow-md hover:scale-110 hover:shadow-[#1877F2]/40 active:scale-95"
                 aria-label="Facebook Profile"
               >
-                <FacebookIcon size={18} />
+                <FacebookIcon size={20} />
               </a>
               <a
                 href="https://www.instagram.com/binriazgroup"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white hover:border-transparent transition-all shadow-sm hover:scale-110"
+                className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center transition-all shadow-md hover:scale-110 hover:shadow-pink-500/30 active:scale-95"
                 aria-label="Instagram Profile"
               >
-                <InstagramIcon size={18} />
+                <InstagramIcon size={20} />
               </a>
               <a
                 href="https://www.tiktok.com/@binriazgroup"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-amber-300 hover:bg-black hover:text-white hover:border-white/50 transition-all shadow-sm hover:scale-110"
+                className="w-10 h-10 rounded-full bg-black text-white border border-white/20 flex items-center justify-center transition-all shadow-md hover:scale-110 hover:shadow-white/20 active:scale-95"
                 aria-label="TikTok Channel"
               >
-                <TikTokIcon size={18} />
+                <TikTokIcon size={19} />
               </a>
               <a
                 href="https://wa.me/923216001913"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-700/50 flex items-center justify-center text-emerald-300 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all shadow-sm hover:scale-110"
+                className="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center transition-all shadow-md hover:scale-110 hover:shadow-[#25D366]/40 active:scale-95"
                 aria-label="WhatsApp Channel"
               >
-                <WhatsAppSolidIcon size={18} />
+                <WhatsAppSolidIcon size={24} />
               </a>
             </div>
           </div>

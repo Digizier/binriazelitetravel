@@ -95,18 +95,39 @@ export default function InquiryRequirementPage() {
     setSubmitting(true);
     setErrorMsg("");
 
-    const specialReqsCombined = [
-      notes ? `Special Notes: ${notes}` : "",
-      `Visa: ${visaNeeded} (${visaDays} Days)`,
-      `Makkah: ${makkahDays} Days in ${makkahHotelCategory} (Ziyarat: ${makkahZiyarat})`,
-      `Madinah: ${madinahDays} Days in ${madinahHotelCategory} (Taif Ziyarat: ${taifZiyarat})`,
-      `Vehicle: ${vehicleType}`,
-      `Wheelchair: ${wheelchair} | Elderly: ${elderlyTravelers} | Children: ${childrenCount}`
-    ].filter(Boolean).join(" | ");
+    const structuredSummary = [
+      `=== 🕋 UMRAH BOOKING REQUIREMENT ===`,
+      `📋 Package: Custom Umrah (${packageDuration})`,
+      `✈️ Departure City: ${departureCity || "Pakistan"}`,
+      `📅 Travel Date: ${departureDate || "Flexible"} | Total Stay: ${totalStayDays} Days`,
+      ``,
+      `👤 APPLICANT & TRAVELERS:`,
+      `• Name: ${fullName}`,
+      `• WhatsApp: ${whatsapp}`,
+      `• Total Travelers: ${numTravelers} Persons`,
+      passportNumber ? `• Passport: ${passportNumber}` : "",
+      `• Special Assistance: Wheelchair: ${wheelchair} | Elderly: ${elderlyTravelers} | Children: ${childrenCount}`,
+      ``,
+      `🛂 VISA REQUIREMENTS:`,
+      `• Visa Needed: ${visaNeeded}`,
+      `• Visa Duration: ${visaDays} Days`,
+      ``,
+      `🏨 MAKKAH & MADINAH HOTELS:`,
+      `• Makkah Stay: ${makkahDays} Days in ${makkahHotelCategory}`,
+      `• Makkah Ziyarat: ${makkahZiyarat}`,
+      `• Madinah Stay: ${madinahDays} Days in ${madinahHotelCategory}`,
+      `• Taif Ziyarat: ${taifZiyarat}`,
+      ``,
+      `🚗 TRANSPORT & BUDGET:`,
+      `• Transport Vehicle: ${vehicleType}`,
+      `• Budget Per Person: ${budgetPerPerson || "Flexible / Market rate"}`,
+      notes ? `\n📝 Special Notes: ${notes}` : "",
+      passportImageUrl ? `\n📎 Passport / Document Proof: Attached` : ""
+    ].filter(Boolean).join("\n");
 
     const res = await createInquiry({
       inquiry_type: "umrah_custom",
-      package_title: `Custom Requirement (${packageDuration} - ${departureCity})`,
+      package_title: `Custom Umrah (${packageDuration} - ${departureCity})`,
       full_name: fullName,
       whatsapp_number: whatsapp,
       passport_number: passportNumber,
@@ -120,7 +141,7 @@ export default function InquiryRequirementPage() {
       ziyarat_required: makkahZiyarat === "Yes",
       taif_required: taifZiyarat === "Yes",
       budget_per_person: budgetPerPerson,
-      special_requirements: specialReqsCombined,
+      special_requirements: structuredSummary,
       passport_image_url: passportImageUrl,
       status: "new"
     });

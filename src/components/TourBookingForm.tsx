@@ -44,10 +44,15 @@ export default function TourBookingForm({ pkg }: TourBookingFormProps) {
     setErrorMsg("");
 
     const combinedNotes = [
-      `Tour Package: ${pkg.title} (${pkg.duration})`,
-      `Room Preference: ${roomType}`,
-      specialReqs ? `Special Requests: ${specialReqs}` : ""
-    ].filter(Boolean).join(" | ");
+      `=== ✈️ TOUR BOOKING INQUIRY ===`,
+      `🌍 Tour Package: ${pkg.title}`,
+      `⏱️ Duration: ${pkg.duration}`,
+      `🏨 Room Preference: ${roomType}`,
+      `✈️ Departure City: ${departureCity || "Pakistan"}`,
+      `📅 Travel Date: ${travelDate || "Flexible"}`,
+      `👥 Total Travelers: ${numTravelers || 1} Persons`,
+      specialReqs ? `\n📝 Special Requests: ${specialReqs}` : ""
+    ].filter(Boolean).join("\n");
 
     const res = await createInquiry({
       inquiry_type: "package_booking",

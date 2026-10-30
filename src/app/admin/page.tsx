@@ -27,6 +27,7 @@ import {
   exportPackagesToCSV 
 } from "@/lib/db";
 import { uploadMedia } from "@/lib/image-compressor";
+import { parseInquiryToRows } from "@/lib/inquiry-formatter";
 import { 
   Lock, 
   LogOut, 
@@ -58,9 +59,104 @@ import {
   Check,
   Sparkles,
   Globe,
-  Tag
+  Tag,
+  User
 } from "lucide-react";
 import { WhatsAppSolidIcon } from "@/components/icons/SocialIcons";
+
+function renderInquiryRequirements(text: string) {
+  if (!text) return null;
+
+  // If already multi-line, render with structured sections & bold labels
+  if (text.includes("\n")) {
+    const lines = text.split("\n");
+    return (
+      <div className="space-y-1 text-xs text-slate-700 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/90 leading-relaxed font-sans">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) return <div key={idx} className="h-1.5" />;
+          if (trimmed.startsWith("===") && trimmed.endsWith("===")) {
+            return (
+              <div key={idx} className="font-bold text-[#064e3b] text-xs pb-1.5 border-b border-emerald-100 flex items-center gap-1.5">
+                <span className="font-serif tracking-tight">{trimmed.replace(/===/g, "").trim()}</span>
+              </div>
+            );
+          }
+          if (trimmed.endsWith(":") && !trimmed.startsWith("•") && !trimmed.includes("Notes:")) {
+            return (
+              <div key={idx} className="font-bold text-[#996515] text-[11px] uppercase tracking-wider pt-2 flex items-center gap-1">
+                <span>{trimmed}</span>
+              </div>
+            );
+          }
+          if (trimmed.startsWith("•")) {
+            const colonIdx = trimmed.indexOf(":");
+            if (colonIdx > -1) {
+              const label = trimmed.slice(1, colonIdx).trim();
+              const val = trimmed.slice(colonIdx + 1).trim();
+              return (
+                <div key={idx} className="flex items-start gap-1.5 pl-1 text-[11.5px]">
+                  <span className="text-emerald-600 font-bold">•</span>
+                  <span>
+                    <strong className="text-slate-900">{label}:</strong>{" "}
+                    <span className="text-slate-700">{val}</span>
+                  </span>
+                </div>
+              );
+            }
+          }
+          return (
+            <div key={idx} className="text-[11.5px] pl-1 text-slate-800">
+              {trimmed}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // If older format with pipe ' | ' delimiter (e.g. earlier Umrah leads as shown in user screenshot)
+  if (text.includes(" | ")) {
+    const items = text.split(" | ").map(item => item.trim()).filter(Boolean);
+    return (
+      <div className="text-xs text-slate-700 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/90 leading-relaxed font-sans space-y-2">
+        <div className="font-bold text-[#064e3b] text-xs pb-1.5 border-b border-emerald-100 flex items-center gap-1.5">
+          <span className="font-serif">🕋 Umrah Booking Requirements</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 pt-0.5">
+          {items.map((item, idx) => {
+            const colonIdx = item.indexOf(":");
+            if (colonIdx > -1) {
+              const key = item.substring(0, colonIdx).trim();
+              const val = item.substring(colonIdx + 1).trim();
+              return (
+                <div key={idx} className="flex items-start gap-1.5 text-[11.5px]">
+                  <span className="text-emerald-600 font-bold">•</span>
+                  <span>
+                    <strong className="text-slate-900">{key}:</strong>{" "}
+                    <span className="text-slate-700">{val}</span>
+                  </span>
+                </div>
+              );
+            }
+            return (
+              <div key={idx} className="flex items-start gap-1.5 text-[11.5px]">
+                <span className="text-emerald-600 font-bold">•</span>
+                <span className="text-slate-700">{item}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 whitespace-pre-line leading-relaxed">
+      {text}
+    </p>
+  );
+}
 
 export default function AdminDashboardPage() {
   // Authentication PIN Gate
@@ -639,9 +735,7 @@ export default function AdminDashboardPage() {
                       </div>
 
                       {inq.special_requirements && (
-                        <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 whitespace-pre-line leading-relaxed">
-                          {inq.special_requirements}
-                        </p>
+                        renderInquiryRequirements(inq.special_requirements)
                       )}
                     </div>
 
@@ -1555,92 +1649,250 @@ export default function AdminDashboardPage() {
       )}
 
       {/* ========================================================
-          MODAL: PRINTABLE INVOICE (#printable-invoice)
+          MODAL: PRINTABLE INVOICE / SPECIFICATION SHEET (#printable-invoice)
       ======================================================== */}
-      {invoiceModal.isOpen && invoiceModal.inquiry && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl space-y-6">
-            
-            {/* Printable Container */}
-            <div id="printable-invoice" className="bg-white text-black p-4 space-y-6">
-              <div className="flex justify-between items-start border-b-2 border-slate-800 pb-4">
-                <div>
-                  <h2 className="font-serif text-2xl font-bold tracking-tight text-[#064e3b]">
-                    BIN RIAZ ELITE TRAVELS & TOURS
-                  </h2>
-                  <p className="text-xs text-slate-500 font-medium">A Brand by Bin Riaz Group of Companies</p>
-                  <p className="text-xs text-slate-600 mt-1">WhatsApp / Helpline: 0321-6001913 | 0315-7801913</p>
+      {invoiceModal.isOpen && invoiceModal.inquiry && (() => {
+        const inq = invoiceModal.inquiry;
+        const parsedRows = parseInquiryToRows(inq);
+        const invoiceNumber = `BR-${inq.id.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase()}`;
+        const issueDate = inq.created_at ? new Date(inq.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : new Date().toLocaleDateString('en-GB');
+
+        return (
+          <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 max-w-4xl w-full shadow-2xl space-y-6 max-h-[94vh] overflow-y-auto">
+              
+              {/* Printable Container (#printable-invoice) */}
+              <div id="printable-invoice" className="bg-white text-slate-900 p-2 sm:p-4 space-y-5 print:p-0 print:space-y-4">
+                
+                {/* Official Letterhead Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-[#064e3b] pb-4 gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <img 
+                      src="/logo.png" 
+                      alt="Bin Riaz Elite Logo" 
+                      className="w-14 h-14 sm:w-16 sm:h-16 object-contain shrink-0" 
+                    />
+                    <div>
+                      <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#064e3b]">
+                        BIN RIAZ ELITE TRAVELS & TOURS
+                      </h2>
+                      <p className="text-[11px] sm:text-xs text-amber-700 font-semibold tracking-wide">
+                        A Brand by Bin Riaz Group of Companies
+                      </p>
+                      <p className="text-[11px] text-slate-600 mt-0.5">
+                        Helpline: <strong>0321-6001913</strong> • Office: <strong>0315-7801913</strong> • Email: binriazelitetravel@gmail.com
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-left sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 w-full sm:w-auto">
+                    <span className="inline-block bg-[#064e3b] text-[#f7e5a9] text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1">
+                      Official Specification
+                    </span>
+                    <div className="font-mono text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+                      REF: #{invoiceNumber}
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium">
+                      Date: {issueDate}
+                    </div>
+                    <div className="text-[11px] font-semibold text-emerald-700 uppercase mt-0.5">
+                      Status: {inq.status || "Pending"}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="text-xs font-mono font-bold uppercase text-slate-400">INVOICE #</span>
-                  <div className="font-mono text-sm font-bold">{invoiceModal.inquiry.id.slice(0, 8)}</div>
-                  <div className="text-xs text-slate-500 mt-1">{new Date().toLocaleDateString()}</div>
+
+                {/* Document Banner */}
+                <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-xl p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                  <div>
+                    <h3 className="font-serif font-bold text-[#064e3b] text-sm">
+                      {inq.inquiry_type === "overseas_visa" 
+                        ? "🌍 Overseas Visa & Employment Requirement Specification" 
+                        : inq.inquiry_type === "package_booking" 
+                        ? "✈️ Tour Package Booking & Requirement Sheet" 
+                        : "🕋 Umrah Sacred Journey Specification & Booking Inquiry"}
+                    </h3>
+                    <p className="text-[11px] text-slate-600">
+                      Target Itinerary: <strong className="text-slate-800">{inq.package_title || "Custom Travel Program"}</strong>
+                    </p>
+                  </div>
+                  <div className="text-xs bg-white px-3 py-1 rounded-lg border border-emerald-200 font-semibold text-[#064e3b]">
+                    Travelers: {inq.num_travelers} Person(s)
+                  </div>
                 </div>
+
+                {/* Client & Travel Summary Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
+                    <span className="font-bold uppercase tracking-wider text-slate-400 text-[10px] block border-b pb-1">
+                      👤 Client / Passenger Details
+                    </span>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">Full Name:</span>
+                      <span className="col-span-2 font-bold text-slate-900">{inq.full_name}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">WhatsApp:</span>
+                      <span className="col-span-2 font-semibold text-emerald-700">{inq.whatsapp_number}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">Passport:</span>
+                      <span className="col-span-2 text-slate-800 font-medium">{inq.passport_number || "Attached / In Process"}</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
+                    <span className="font-bold uppercase tracking-wider text-slate-400 text-[10px] block border-b pb-1">
+                      📋 Itinerary & Quotation Meta
+                    </span>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">Category:</span>
+                      <span className="col-span-2 font-bold text-slate-900 uppercase text-[11px]">{inq.inquiry_type?.replace(/_/g, " ")}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">Target Service:</span>
+                      <span className="col-span-2 font-semibold text-slate-800">{inq.package_title || "Custom Package"}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      <span className="text-slate-500">Est. Budget:</span>
+                      <span className="col-span-2 font-bold text-[#064e3b]">{inq.budget_per_person || "Custom Assessment"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Itemized Specifications Table (Rows View) */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-bold text-xs uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5 text-[#064e3b]" />
+                      <span>Itemized Requirements & Specifications (Rows View)</span>
+                    </h4>
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      {parsedRows.length} Parameters Recorded
+                    </span>
+                  </div>
+
+                  <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="bg-[#064e3b] text-[#f7e5a9] text-[10px] uppercase tracking-wider font-semibold">
+                          <th className="py-2.5 px-3 w-10 text-center border-r border-emerald-900/40">#</th>
+                          <th className="py-2.5 px-3 w-40 sm:w-48 border-r border-emerald-900/40">Section / Category</th>
+                          <th className="py-2.5 px-3 w-44 sm:w-56 border-r border-emerald-900/40">Parameter / Requirement</th>
+                          <th className="py-2.5 px-3">Client Specification & Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200">
+                        {parsedRows.length > 0 ? (
+                          parsedRows.map((row, idx) => (
+                            <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-slate-50/70"}>
+                              <td className="py-2 px-3 text-center font-mono text-[11px] text-slate-400 font-bold border-r border-slate-200">
+                                {idx + 1}
+                              </td>
+                              <td className="py-2 px-3 font-semibold text-[#064e3b] text-[11px] border-r border-slate-200">
+                                {row.section}
+                              </td>
+                              <td className="py-2 px-3 font-medium text-slate-700 text-[11px] border-r border-slate-200">
+                                {row.label}
+                              </td>
+                              <td className="py-2 px-3 text-slate-900 font-semibold text-[11.5px]">
+                                {row.value}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4} className="py-4 px-3 text-center text-slate-500 italic">
+                              {inq.special_requirements || "Standard booking requirements registered."}
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Attached Document Proof (if uploaded) */}
+                {inq.passport_image_url && (
+                  <div className="border border-slate-200 rounded-xl p-3 bg-slate-50/80 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={inq.passport_image_url} 
+                        alt="Passport Verification Document" 
+                        className="w-16 h-12 object-cover rounded-lg border border-slate-300 shadow-sm shrink-0" 
+                      />
+                      <div>
+                        <div className="font-bold text-xs text-slate-800">Passport / CNIC Document Attached</div>
+                        <div className="text-[10px] text-slate-500">Official identification proof submitted by applicant.</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full uppercase">
+                      ✓ Verified Attachment
+                    </span>
+                  </div>
+                )}
+
+                {/* Official Terms & Notes */}
+                <div className="border border-slate-200 rounded-xl p-3 bg-slate-50/50 text-[10px] text-slate-600 space-y-1">
+                  <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wider mb-1 text-[#064e3b]">
+                    Official Terms & Guidelines (قواعد و ضوابط):
+                  </div>
+                  <ul className="list-disc pl-4 space-y-0.5 leading-relaxed">
+                    <li>All visa approvals and entry permissions are subject to the respective Embassy and Ministry regulations.</li>
+                    <li>Hotel rooms and flight seats are subject to availability and will be locked upon advance security deposit.</li>
+                    <li>Original passport must have minimum 6 months validity from the scheduled departure date.</li>
+                    <li>For rapid assistance and quotation confirmation, connect with Malik Aamir Riaz at 0321-6001913.</li>
+                  </ul>
+                </div>
+
+                {/* Signatures & Stamp Area */}
+                <div className="grid grid-cols-2 gap-8 pt-6 border-t border-slate-300 text-xs">
+                  <div className="text-center space-y-6">
+                    <div className="h-10"></div>
+                    <div className="border-t border-dashed border-slate-400 pt-1 text-slate-600 text-[11px]">
+                      Client / Passenger Signature
+                    </div>
+                  </div>
+                  <div className="text-center space-y-6">
+                    <div className="h-10 flex items-center justify-center">
+                      <span className="text-[10px] font-serif uppercase tracking-widest text-emerald-800 border border-emerald-300 bg-emerald-50/50 px-3 py-1 rounded">
+                        Bin Riaz Elite Verified Stamp
+                      </span>
+                    </div>
+                    <div className="border-t border-dashed border-slate-400 pt-1 text-slate-600 text-[11px]">
+                      Authorized Agency Representative (Malik Aamir Riaz)
+                    </div>
+                  </div>
+                </div>
+
+                {/* Agency Footer */}
+                <div className="text-center pt-2 text-[10px] text-slate-400 space-y-0.5 border-t border-slate-100">
+                  <p className="font-semibold text-slate-600">Bin Riaz Elite Travels & Tours • Your Trusted Sacred & Luxury Journey Partner</p>
+                  <p>Website: binriazelitetravel.com • Contact: 0321-6001913 | 0315-7801913 • Pakistan</p>
+                </div>
+
               </div>
 
-              {/* Passenger & Booking Meta */}
-              <div className="grid grid-cols-2 gap-4 text-xs">
-                <div>
-                  <span className="font-bold uppercase text-slate-400 text-[10px]">Client Details</span>
-                  <div className="font-bold text-sm mt-0.5">{invoiceModal.inquiry.full_name}</div>
-                  <div className="text-slate-600">WhatsApp: {invoiceModal.inquiry.whatsapp_number}</div>
-                  {invoiceModal.inquiry.passport_number && <div>Passport: {invoiceModal.inquiry.passport_number}</div>}
-                </div>
-                <div>
-                  <span className="font-bold uppercase text-slate-400 text-[10px]">Service / Itinerary</span>
-                  <div className="font-bold text-sm mt-0.5">{invoiceModal.inquiry.package_title || "Umrah Booking"}</div>
-                  <div className="text-slate-600">Travelers: {invoiceModal.inquiry.num_travelers} Persons</div>
-                </div>
+              {/* Modal Actions (No Print) */}
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t no-print">
+                <button
+                  onClick={() => setInvoiceModal({ isOpen: false })}
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 transition-colors rounded-xl text-xs font-bold text-slate-700"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="px-6 py-2.5 bg-[#064e3b] hover:bg-[#043d2e] text-[#f7e5a9] transition-all rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#064e3b]/30 active:scale-95"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print / Save as PDF</span>
+                </button>
               </div>
 
-              {/* Itemized Table */}
-              <table className="w-full text-xs text-left border-collapse border border-slate-200">
-                <thead className="bg-slate-100 text-slate-700 uppercase text-[10px]">
-                  <tr>
-                    <th className="p-2 border">Description</th>
-                    <th className="p-2 border text-center">Qty</th>
-                    <th className="p-2 border text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-2 border font-medium">
-                      {invoiceModal.inquiry.package_title || "Umrah Service & Travel Booking"}
-                      <div className="text-[11px] text-slate-500">{invoiceModal.inquiry.special_requirements}</div>
-                    </td>
-                    <td className="p-2 border text-center">{invoiceModal.inquiry.num_travelers}</td>
-                    <td className="p-2 border text-right font-bold text-emerald-700 uppercase">
-                      {invoiceModal.inquiry.status}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <div className="text-center pt-6 border-t text-[11px] text-slate-500 space-y-1">
-                <p className="font-bold">Bin Riaz Elite Travels & Tours • Your Trusted Partner</p>
-                <p>Official Website: binriazelitetravel.com • Contact: 0321-6001913</p>
-              </div>
-            </div>
-
-            {/* Modal Actions */}
-            <div className="flex justify-end gap-3 pt-4 border-t no-print">
-              <button
-                onClick={() => setInvoiceModal({ isOpen: false })}
-                className="px-4 py-2 bg-slate-100 rounded-xl text-xs font-semibold text-slate-700"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="px-5 py-2 bg-[#064e3b] text-[#f7e5a9] rounded-xl text-xs font-bold flex items-center gap-1.5 shadow"
-              >
-                <Printer className="w-4 h-4" />
-                <span>Print Document</span>
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
     </div>
   );
