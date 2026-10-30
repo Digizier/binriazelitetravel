@@ -103,7 +103,8 @@ export default function Footer() {
               <li><Link href="/hajj" className="hover:text-amber-300 transition-colors">Hajj Services</Link></li>
               <li><Link href="/tours" className="hover:text-amber-300 transition-colors">All Tours</Link></li>
               <li><Link href="/visa" className="hover:text-amber-300 transition-colors">Visa Services</Link></li>
-              <li><Link href="/inquiry" className="hover:text-amber-300 transition-colors">Inquiry Form</Link></li>
+              <li><Link href="/inquiry" className="hover:text-amber-300 transition-colors">Umrah Inquiry Form</Link></li>
+              <li><Link href="/overseas-inquiry" className="hover:text-amber-300 transition-colors text-amber-200">Overseas Visa Form</Link></li>
               <li><Link href="/contact" className="hover:text-amber-300 transition-colors">Contact Us</Link></li>
             </ul>
           </div>

@@ -610,8 +610,14 @@ export default function AdminDashboardPage() {
                     <div className="space-y-2 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-serif text-sm font-bold text-slate-900">{inq.full_name}</span>
-                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#064e3b]">
-                          {inq.inquiry_type}
+                        <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                          inq.inquiry_type === 'overseas_visa'
+                            ? 'bg-blue-100 text-blue-900 border border-blue-200'
+                            : inq.inquiry_type === 'umrah_custom'
+                            ? 'bg-emerald-100 text-[#064e3b] border border-emerald-200'
+                            : 'bg-amber-100 text-[#996515] border border-amber-200'
+                        }`}>
+                          {inq.inquiry_type === 'overseas_visa' ? '🌍 Overseas Visa & Job' : inq.inquiry_type === 'umrah_custom' ? '🕋 Umrah Requirement' : inq.inquiry_type}
                         </span>
                         <span className="text-[10px] text-slate-400">
                           {inq.created_at ? new Date(inq.created_at).toLocaleString() : ""}
@@ -633,7 +639,7 @@ export default function AdminDashboardPage() {
                       </div>
 
                       {inq.special_requirements && (
-                        <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                        <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 whitespace-pre-line leading-relaxed">
                           {inq.special_requirements}
                         </p>
                       )}

@@ -28,7 +28,8 @@ export default function Header() {
     { name: "Hajj Services", href: "/hajj" },
     { name: "Tours", href: "/tours" },
     { name: "Visa Services", href: "/visa" },
-    { name: "Inquiry Form", href: "/inquiry" },
+    { name: "Umrah Inquiry Form", href: "/inquiry" },
+    { name: "Overseas Form", href: "/overseas-inquiry" },
     { name: "Contact Us", href: "/contact" },
   ];
 
@@ -94,14 +95,14 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-7">
+          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-5">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-sm font-medium transition-colors hover:text-[#064e3b] relative py-1 ${
+                  className={`text-xs xl:text-sm font-medium transition-colors hover:text-[#064e3b] relative py-1 whitespace-nowrap ${
                     isActive 
                       ? "text-[#064e3b] font-semibold" 
                       : "text-slate-700 hover:text-[#064e3b]"

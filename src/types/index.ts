@@ -45,7 +45,7 @@ export interface Category {
 
 export interface Inquiry {
   id: string;
-  inquiry_type: 'umrah_custom' | 'package_booking' | 'flight' | 'hotel' | 'visa' | 'transport' | 'general';
+  inquiry_type: 'umrah_custom' | 'package_booking' | 'flight' | 'hotel' | 'visa' | 'transport' | 'general' | 'overseas_visa';
   package_id?: string | null;
   package_title?: string;
   full_name: string;
